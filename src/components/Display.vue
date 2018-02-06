@@ -15,16 +15,19 @@ export default {
   data() {
     return {
       title: 'Forecast',
-      buienradarData: [],
+      buienradarData: {},
     };
   },
-  methods: {
-
+  created: function() {
+    this.fetchData();
   },
-  mounted: () => {
-    this.$http.get('http://ip-api.com/json').then(response => {
-      this.$set(this, 'buienradarData', response);
-    });
+  methods: {
+    fetchData: function() {
+      this.$http.get('https://xml.buienradar.nl')
+        .then(response => {
+          this.$set(this, 'buienradarData', response);
+        })
+    }
   },
   components: {
     Tile,
@@ -36,6 +39,7 @@ export default {
 <style scoped>
 h1, h2 {
   font-weight: normal;
+  text-align: center;
 }
 ul {
   list-style-type: none;
@@ -57,7 +61,6 @@ a {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  padding: 0 20px;
   justify-content: center;
 }
 </style>
