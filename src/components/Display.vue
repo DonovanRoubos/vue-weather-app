@@ -9,6 +9,7 @@
 
 <script>
 import Tile from './Tile.vue';
+import { parseString } from 'xml2js';
 
 export default {
   name: 'title',
@@ -18,20 +19,32 @@ export default {
       buienradarData: {},
     };
   },
-  created: function() {
+  created: function () {
     this.fetchData();
   },
   methods: {
-    fetchData: function() {
+    fetchData: function () {
       this.$http.get('https://xml.buienradar.nl')
-        .then(response => {
-          this.$set(this, 'buienradarData', response);
-        })
-    }
+        .then(({ data: xml }) => {
+          parseString(xml,
+            { trim: true, explicitArray: false, preserveChilden: true },
+            (error, parsed) => {
+
+              const moreDaysData = parsed.buienradarnl.weergegevens.verwachting_meerdaags;
+              const moreDays = [];
+
+              for (let i = 0; i < 5; i += 1) {
+                const oneDayData = moreDaysData[`dag-plus${i + 1}`];
+                moreDays.push(oneDayData);
+              }
+              console.log(moreDays);
+            });
+        });
+    },
   },
   components: {
     Tile,
-  },
+  }
 };
 </script>
 
