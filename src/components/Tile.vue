@@ -1,5 +1,6 @@
 <template>
   <div class="forecast-tile">
+    {{weather.dagweek}}
   </div>
 </template>
 
@@ -7,10 +8,13 @@
 
 export default {
   name: 'Tile',
+  props: ['weather'],
   data() {
     return {
-      title: 'Five day weather forecast of The Netherlands',
+      weather: this.weather
     };
+  },
+  created: function () {
   },
 };
 </script>
@@ -40,5 +44,6 @@ a {
   border-radius: 20px;
   height: 400px;
   width: 300px;
+  margin: 32px 32px;
 }
 </style>

@@ -2,7 +2,7 @@
   <div class="display">
     <h1>{{ title }}</h1>
     <div class="forecast-tiles-container">
-      <Tile/>
+      <Tile v-for="weather in buienradarData" :weather="weather" />
     </div>
   </div>
 </template>
@@ -12,11 +12,11 @@ import Tile from './Tile.vue';
 import { parseString } from 'xml2js';
 
 export default {
-  name: 'title',
+  name: 'display',
   data() {
     return {
       title: 'Forecast',
-      buienradarData: {},
+      buienradarData: []
     };
   },
   created: function () {
@@ -35,9 +35,8 @@ export default {
 
               for (let i = 0; i < 5; i += 1) {
                 const oneDayData = moreDaysData[`dag-plus${i + 1}`];
-                moreDays.push(oneDayData);
+                this.buienradarData.push(oneDayData);
               }
-              console.log(moreDays);
             });
         });
     },
