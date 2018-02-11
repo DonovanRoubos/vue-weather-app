@@ -2,7 +2,7 @@
   <div class="display">
     <h1>{{ title }}</h1>
     <div class="forecast-tiles-container">
-      <Tile v-for="weather in buienradarData" :weather="weather" />
+      <Tile v-for="oneDay in fiveDays" :oneDay="oneDay" />
     </div>
   </div>
 </template>
@@ -15,8 +15,9 @@ export default {
   name: 'display',
   data() {
     return {
-      title: 'Forecast',
-      buienradarData: []
+      title: '5-daagse verwachting',
+      fiveDays: [],
+      allData: [],
     };
   },
   created: function () {
@@ -30,12 +31,15 @@ export default {
             { trim: true, explicitArray: false, preserveChilden: true },
             (error, parsed) => {
 
+              const allData = parsed.buienradarnl;
+              this.allData.push(allData);
+
               const moreDaysData = parsed.buienradarnl.weergegevens.verwachting_meerdaags;
               const moreDays = [];
 
               for (let i = 0; i < 5; i += 1) {
                 const oneDayData = moreDaysData[`dag-plus${i + 1}`];
-                this.buienradarData.push(oneDayData);
+                this.fiveDays.push(oneDayData);
               }
             });
         });
@@ -67,7 +71,7 @@ a {
 
 .forecast-tiles-container {
   width: 100%;
-  max-width: 1500px;
+  max-width: 100%;
   height: auto;
   margin: 0 auto;
   display: flex;
